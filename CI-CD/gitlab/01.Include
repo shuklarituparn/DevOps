@@ -1,0 +1,198 @@
+include:component
+
+
+Use include:component to add a CI/CD component to the pipeline configuration.
+
+Keyword type: Global keyword.
+
+Possible inputs: The full address of the CI/CD component, formatted as
+                 <fully-qualified-domain-name>/<project-path>/<component-name>@<specific-version>.
+
+Example of include:component:
+
+include:
+  - component: gitlab.example.com/my-org/security-components/secret-detection@1.0
+
+Related topics:
+
+Use a CI/CD component.
+
+include:local
+
+Use include:local to include a file that is in the same repository and branch as the configuration file containing the
+            include keyword. Use include:local instead of symbolic links.
+
+Keyword type: Global keyword.
+
+Possible inputs:
+
+A full path relative to the root directory (/):
+
+The YAML file must have the extension .yml or .yaml.
+You can use * and ** wildcards in the file path.
+You can use certain CI/CD variables.
+Example of include:local:
+
+include:
+  - local: '/templates/.gitlab-ci-template.yml'
+
+You can also use shorter syntax to define the path:
+
+include: '.gitlab-ci-production.yml'
+
+Additional details:
+
+The .gitlab-ci.yml file and the local file must be on the same branch.
+You can’t include local files through Git submodules paths.
+
+All nested includes are executed in the scope of the project containing the configuration file with the
+include keyword, not the project running the pipeline. You can use local, project, remote, or template includes.
+
+
+include:project
+
+History
+
+To include files from another private project on the same GitLab instance, use include:project and include:file.
+
+Keyword type: Global keyword.
+
+Possible inputs:
+
+include:project: The full GitLab project path.
+include:file A full file path, or array of file paths, relative to the root directory (/). The YAML files must have the .yml or .yaml extension.
+include:ref: Optional. The ref to retrieve the file from. Defaults to the HEAD of the project when not specified.
+You can use certain CI/CD variables.
+Example of include:project:
+
+include:
+  - project: 'my-group/my-project'
+    file: '/templates/.gitlab-ci-template.yml'
+  - project: 'my-group/my-subgroup/my-project-2'
+    file:
+      - '/templates/.builds.yml'
+      - '/templates/.tests.yml'
+
+You can also specify a ref:
+
+include:
+  - project: 'my-group/my-project'
+    ref: main                                      # Git branch
+    file: '/templates/.gitlab-ci-template.yml'
+  - project: 'my-group/my-project'
+    ref: v1.0.0                                    # Git Tag
+    file: '/templates/.gitlab-ci-template.yml'
+  - project: 'my-group/my-project'
+    ref: 787123b47f14b552955ca2786bc9542ae66fee5b  # Git SHA
+    file: '/templates/.gitlab-ci-template.yml'
+
+Additional details:
+
+All nested includes are executed in the scope of the project containing the configuration file with the nested include
+keyword. You can use local (relative to the project containing the configuration file with the include keyword),
+project, remote, or template includes.
+When the pipeline starts, the .gitlab-ci.yml file configuration included by all methods is evaluated. The configuration
+is a snapshot in time and persists in the database. GitLab does not reflect any changes to the referenced
+.gitlab-ci.yml file configuration until the next pipeline starts.
+
+When you include a YAML file from another private project, the user running the pipeline must be a member of
+both projects and have the appropriate permissions to run pipelines. A not found or access denied error may be
+displayed if the user does not have access to any of the included files.
+
+Be careful when including another project’s CI/CD configuration file. No pipelines or notifications trigger when
+CI/CD configuration files change. From a security perspective, this is similar to pulling a third-party dependency.
+
+For the ref, consider:
+Using a specific SHA hash, which should be the most stable option. Use the full 40-character SHA hash to ensure the
+desired commit is referenced, because using a short SHA hash for the ref might be ambiguous.
+Applying both protected branch and protected tag rules to the ref in the other project. Protected tags and branches
+are more likely to pass through change management before changing.
+
+
+
+include:remote
+
+
+Use include:remote with a full URL to include a file from a different location.
+
+Keyword type: Global keyword.
+
+Possible inputs:
+
+A public URL accessible by an HTTP/HTTPS GET request:
+
+Authentication with the remote URL is not supported.
+The YAML file must have the extension .yml or .yaml.
+You can use certain CI/CD variables.
+Example of include:remote:
+
+include:
+  - remote: 'https://gitlab.com/example-project/-/raw/main/.gitlab-ci.yml'
+
+Additional details:
+
+All nested includes are executed without context as a public user, so you can only include public projects or templates.
+No variables are available in the include section of nested includes.
+Be careful when including another project’s CI/CD configuration file. No pipelines or notifications trigger when the
+other project’s files change. From a security perspective, this is similar to pulling a third-party dependency.
+If you link to another GitLab project you own, consider the use of both protected branches and protected tags to enforce
+change management rules.
+
+
+
+include:template
+
+Use include:template to include .gitlab-ci.yml templates.
+
+Keyword type: Global keyword.
+
+Possible inputs:
+
+A CI/CD template:
+
+All templates can be viewed in lib/gitlab/ci/templates. Not all templates are designed to be used with
+include:template, so check template comments before using one.
+
+You can use certain CI/CD variables.
+
+Example of include:template:
+
+# File sourced from the GitLab template collection
+include:
+  - template: Auto-DevOps.gitlab-ci.yml
+
+Multiple include:template files:
+
+include:
+  - template: Android-Fastlane.gitlab-ci.yml
+  - template: Auto-DevOps.gitlab-ci.yml
+
+Additional details:
+
+All nested includes are executed without context as a public user, so you can only include public projects or
+templates. No variables are available in the include section of nested includes.
+
+include:inputs
+
+History
+
+Use include:inputs to set the values for input parameters when the included configuration uses spec:inputs and is added to the pipeline.
+
+Keyword type: Global keyword.
+
+Possible inputs: A string, numeric value, or boolean.
+
+Example of include:inputs:
+
+include:
+  - local: 'custom_configuration.yml'
+    inputs:
+      website: "My website"
+
+In this example:
+
+The configuration contained in custom_configuration.yml is added to the pipeline, with a website input set to a value of My website for the included configuration.
+Additional details:
+
+If the included configuration file uses spec:inputs:type, the input value must match the defined type.
+If the included configuration file uses spec:inputs:options, the input value must match one of the listed options.

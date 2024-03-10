@@ -1,0 +1,35 @@
+default
+
+You can set global defaults for some keywords. Each default keyword is copied to every
+job that doesn’t already have it defined. If the job already has a keyword defined, that default is not used.
+
+Keyword type: Global keyword.
+
+Possible inputs: These keywords can have custom defaults:
+
+after_script
+artifacts
+before_script
+cache
+hooks
+id_tokens
+image
+interruptible
+retry
+services
+tags
+timeout
+
+
+    default:
+      image: rituparnshukla/mmyffmpeg-app:latest
+      retry: 2
+
+    rspec:                                             #This will use the ruby 3.0 image
+      script: bundle exec rspec
+
+    rspec 2.7:
+      image: ruby:2.7
+      script: bundle exec rspec
+
+
