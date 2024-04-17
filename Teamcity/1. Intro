@@ -1,0 +1,33 @@
+    1. Can write configuration as code and host it on VCS
+    2. Can write this configuration as code in Kotlin
+
+Build Chains:
+
+    1. Sequence of the build as dependencies and can pass the artifacts
+    2. Can run same build in parallel in different cloud provider for different os and then deploy it
+    3. Personal build can be run direct from the IDE (useful to test changes before committing- using plugin)
+
+Architecture:
+
+    Main server:
+
+    1. Central teamcity server: provides the UI for build config
+    2. Build information and results
+
+    Build Agents :
+
+    1. Run build configurations
+    2. Connect as many agents you want
+    3. Can run on server, on premise etc.
+    4. It automatically detects, which build agent can execute which build
+
+
+
+
+How to setup:
+
+    docker run \
+    -v team_city_data:/data/teamcity_server/datadir \                                 #the volume to persist
+    -v team_city_logs:/opt/teamcity/logs  \                                           #to store the logs, docker will create all these volumes
+    -p 8111:8111 \                                                                    #port for the teamcity server
+    -d jetbrains/teamcity-server                                                      #run in background so "-d" and the image

@@ -1,0 +1,22 @@
+
+    In teamcity cloud all the agents are managed for you (Below using docker image to build an agent)
+
+    docker run -e SERVER_URL="http://public-ip:8111"  \                    # Where the agent should connect to
+    -v team_city_agent_config_two:/data/teamcity_agent/conf  \             #Mounting the volume to store the config files
+    -v /var/run/docker.sock:/var/run/docker.sock \                         #Mounts the docker socket file to the contianer
+                                                                            (this gives the container ability to talk to docker daemon)
+    -v /usr/local/bin/docker:/usr/bin/docker \                             #Mounting the binary from the user computer to the one on docker
+    -d jetbrains/teamcity-agent
+
+
+
+NOTE: for docker mount to work and docker commands to be executable inside the container, you need to set less
+      stricter permission on docker on the host with the following command
+
+       chmod 666 /var/run/docker.sock
+
+
+
+ENV:
+
+    To use the env variables in the docker, can use the parameters options in the project tab

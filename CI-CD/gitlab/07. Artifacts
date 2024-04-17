@@ -1,0 +1,65 @@
+Use artifacts to specify which files to save as job artifacts. Job artifacts
+are a list of files and directories that are attached to the job when it succeeds, fails, or always.
+
+
+job:
+  artifacts:
+    paths:
+      - binaries/
+      - .config
+
+
+This example creates an artifact with .config and all the files in the binaries directory.
+
+artifacts:
+  paths:
+    - binaries/
+  exclude:
+    - binaries/**/*.o
+
+
+This example stores all files in binaries/, but not *.o files located in subdirectories of binaries/.
+
+job:
+  artifacts:
+    expire_in: 1 week
+
+Keyword type: Job keyword. You can use it only as part of a job or in the default section.
+
+Possible inputs: The expiry time. If no unit is provided, the time is in seconds. Valid values include:
+
+'42'
+42 seconds
+3 mins 4 sec
+2 hrs 20 min
+2h20min
+6 mos 1 day
+47 yrs 6 mos and 4d
+3 weeks and 2 days
+never
+
+
+test:
+  script: ["echo 'test' > file.txt"]
+  artifacts:
+    expose_as: 'artifact 1'
+    paths: ['file.txt']
+
+
+Use the artifacts:expose_as keyword to expose job artifacts in the merge request UI.
+
+Keyword type: Job keyword. You can use it only as part of a job or in the default section.
+
+Possible inputs:
+
+The name to display in the merge request UI for the artifacts download link. Must be combined with artifacts:paths.
+
+
+rspec:
+  stage: test
+  script:
+    - bundle install
+    - rspec --format RspecJunitFormatter --out rspec.xml
+  artifacts:
+    reports:
+      junit: rspec.xml

@@ -1,0 +1,51 @@
+
+    In the example the project has the docker file so the agent will build it and push it to the docker registry
+
+    Click configure build steps if want to define it manually
+
+    Build Application -step name
+
+
+
+2. Choose docker run to build docker image
+
+    Step Name: Build Image
+
+    Execute step: Constraint that we can set (to execute our pipeline only after a specific command)
+
+    Docker command: We can define the docker command that we want to run (build, push or other)
+
+    Dockerfile (path to file): We can select our dockerfile from this
+
+    Image Name:tag := tag to push the image. Can use like shuklarituparn/myapp-9.0-%build.number%
+
+                       (Here can actually provide multiple tags to build multiple images) - shuklarituparn/myapp-latest
+
+    There is an option in teamcity to select the build parameters and its a good practice to use the build number
+
+
+
+    Step Name: Push Image
+
+        Execute step: Constraint that we can set (to execute our pipeline only after a specific command)
+
+        Docker command: We can define the docker command that we want to run (build, push or other)
+
+        Image Name:tag := tag to push the image. Can use like shuklarituparn/myapp-9.0-%build.number%
+
+                           (Here can actually provide multiple tags to build multiple images) - shuklarituparn/myapp-latest
+
+        There is an option in teamcity to select the build parameters and its a good practice to use the build number
+
+
+
+To connect teamcity to other platforms
+
+        1. Go to the project and then navigate to the connections
+
+        2. There click add connection and then login to the platform that we want to use
+
+        3. Now after the connection is successful, we need to go to the build and add build features
+
+        4. And there add Docker Support and Add registery connection
+

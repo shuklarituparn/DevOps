@@ -1,0 +1,6 @@
+build:
+  needs: [lint, test]
+  runs-on: ubuntu-latest
+  strategy:
+    matrix:
+      node-version: [14, 16]    # We can check the build once for many platforms and versions

@@ -1,0 +1,12 @@
+name: Test    #Name that we want to give the workflow
+on: push      #On which action will this workflow run
+jobs:        #Jobs that this workflow will perform
+  test:
+    runs-on: ubuntu-latest               #Runners that will run this task (Basically OS)
+    steps:
+      - name: Get repository code      # Task1 we get the code from the repo
+        uses: actions/checkout@v3      #They checkout action will get the code from our repo
+      - name: Install deps             # Task 2 that will run on this job
+        run: npm install             # We install all the dependencies using npm install
+      - name: Test app               # Task 3 that this demo job will run
+        run: npm run test             # This will check if the test passes

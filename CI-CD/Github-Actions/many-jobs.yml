@@ -1,0 +1,54 @@
+# When the task has to do a lot of task
+
+
+name: Test
+on: push
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get repository code
+        uses: actions/checkout@v3
+      - name: Install deps
+        run: npm install
+      - name: Test app
+        run: npm run test     # Till here we get the code and then check if the dependencies and the tests are ok
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get repository code
+        uses: actions/checkout@v3
+      - name: Install deps
+        run: npm install
+      - name: Lint code
+        run: npm run lint      #Running linting on the code
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get repository code
+        uses: actions/checkout@v3
+      - name: Install deps
+        run: npm install
+      - name: Build App
+        run: npm run build     #Final build job
+
+
+#name: Deployment 2
+#on: push
+#jobs:
+#  deployment:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Get repository code
+#        uses: actions/checkout@v3
+#      - name: Install deps
+#        run: npm install
+#      - name: Test app
+#        run: npm run test
+#      - name: Lint code
+#        run: npm run lint
+#      - name: Build App
+#        run: npm run build
+
+
+# We can do the same at the same time
